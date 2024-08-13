@@ -143,8 +143,8 @@ For TypeScript:
 ```typescript
 import { XrayDatacenterClient, XrayCloudClient, ReportConfig, JUNIT_FORMAT } from '@xray-app/xray-automation'
 
-let reportFile = 'report.xml';
-let reportConfig: ReportConfig = {
+const reportFile = 'report.xml';
+const reportConfig: ReportConfig = {
     format: JUNIT_FORMAT,
     projectKey: 'BOOK',
     version: '1.0',
@@ -154,7 +154,7 @@ let reportConfig: ReportConfig = {
     testEnvironments: [],
 }
 
-let res = await xrayClient.submitResults(reportFile, reportConfig);
+const res = await xrayClient.submitResults(reportFile, reportConfig);
 console.log('Test Execution key: ' + res.key);
 ```
 
@@ -163,8 +163,8 @@ For JavaScript:
 ```javascript
 import { XrayDatacenterClient, XrayCloudClient, JUNIT_FORMAT } from '@xray-app/xray-automation'
 
-let reportFile = 'report.xml';
-let reportConfig = {
+const reportFile = 'report.xml';
+const reportConfig = {
     format: JUNIT_FORMAT,
     projectKey: 'BOOK',
     version: '1.0',
@@ -174,7 +174,7 @@ let reportConfig = {
     testEnvironments: []
 }
 
-let res = await xrayClient.submitResults(reportFile, reportConfig);
+const res = await xrayClient.submitResults(reportFile, reportConfig);
 console.log('Test Execution key: ' + res.key);
 ```
 
@@ -218,7 +218,7 @@ For TypeScript:
 import { XrayDatacenterClient, XrayCloudClient, ReportConfig, JUNIT_FORMAT } from '@xray-app/xray-automation'
 
 ...
-let testExecInfoJson = { 
+const testExecInfoJson = { 
     "fields": {
         "project": {
             "key": "CALC"
@@ -228,7 +228,7 @@ let testExecInfoJson = {
     }
 };
 
-let multipartConfig: ReportConfig = {
+const multipartConfig: ReportConfig = {
     format: JUNIT_FORMAT,
     testInfoFile: 'testInfo.json',
     // testInfo: testInfoJson,
@@ -236,7 +236,7 @@ let multipartConfig: ReportConfig = {
     // testExecInfo: testExecInfoJson,
 }
 
-let res = await xrayClient.submitResultsMultipart(file: reportFile, config: multipartConfig);
+const res = await xrayClient.submitResultsMultipart(file: reportFile, config: multipartConfig);
 console.log('Test Execution key: ' + res.key);
 ```
 
@@ -246,7 +246,7 @@ For JavaScript:
 import { XrayDatacenterClient, XrayCloudClient, JUNIT_FORMAT } from '@xray-app/xray-automation'
 
 ...
-let testExecInfoJson = { 
+const testExecInfoJson = { 
     "fields": {
         "project": {
             "key": "CALC"
@@ -256,7 +256,7 @@ let testExecInfoJson = {
     }
 };
 
-let multipartConfig = {
+const multipartConfig = {
     format: JUNIT_FORMAT,
     testInfoFile: 'testInfo.json',
     // testInfo: testInfoJson,
@@ -264,7 +264,7 @@ let multipartConfig = {
     // testExecInfo: testExecInfoJson,
 }
 
-let res = await xrayClient.submitResultsMultipart(file: reportFile, config: multipartConfig);
+const res = await xrayClient.submitResultsMultipart(file: reportFile, config: multipartConfig);
 console.log('Test Execution key: ' + res.key);
 ```
 
@@ -276,12 +276,12 @@ However, for some formats (and respective endpoints), this may not be possible. 
 For TypeScript:
 
 ```typescript
-let testExecKey = 'CALC-11';
-let testPlanKey = 'CALC-10';
-let res = await xrayClient.associateTestExecutionToTestPlan(testExecKey, testPlanKey);
+const testExecKey = 'CALC-11';
+const testPlanKey = 'CALC-10';
+const res = await xrayClient.associateTestExecutionToTestPlan(testExecKey, testPlanKey);
 
 // or if you know the issue ids... (Xray on Jira cloud only)
-// let res = await xrayClient.associateTestExecutionToTestPlanByIds('10001', '10000');
+// const res = await xrayClient.associateTestExecutionToTestPlanByIds('10001', '10000');
 
 console.log('Test Execution key: ' + res.key);
 ```
@@ -289,12 +289,12 @@ console.log('Test Execution key: ' + res.key);
 For JavaScript:
 
 ```javascript
-let testExecKey = 'CALC-11';
-let testPlanKey = 'CALC-10';
-let res = await xrayClient.associateTestExecutionToTestPlan(testExecKey, testPlanKey);
+const testExecKey = 'CALC-11';
+const testPlanKey = 'CALC-10';
+const res = await xrayClient.associateTestExecutionToTestPlan(testExecKey, testPlanKey);
 
 // or if you know the issue ids... (Xray on Jira cloud only)
-// let res = await xrayClient.associateTestExecutionToTestPlanByIds('10001', '10000');
+// const res = await xrayClient.associateTestExecutionToTestPlanByIds('10001', '10000');
 
 console.log('Test Execution key: ' + res.key);
 ```

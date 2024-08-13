@@ -22,12 +22,12 @@ import {
 } from "../src/index";
 
 describe("timeout handling", () => {
-  let mock: MockAdapter;
-  let reportFile = "__tests__/resources/robot.xml";
+  const mock: MockAdapter;
+  const reportFile = "__tests__/resources/robot.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -35,7 +35,7 @@ describe("timeout handling", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -52,7 +52,7 @@ describe("timeout handling", () => {
   it("succeeds if requests take less than configured timeout", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
@@ -63,12 +63,12 @@ describe("timeout handling", () => {
       timeout: 2000,
     };
     const xrayClient = new XrayDatacenterClient(xrayServerSettings);
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -79,7 +79,7 @@ describe("timeout handling", () => {
   it("returns an error if requests take more than configured timeout", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
@@ -90,9 +90,9 @@ describe("timeout handling", () => {
       timeout: 500,
     };
     const xrayClient = new XrayDatacenterClient(xrayServerSettings);
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
     try {
@@ -105,12 +105,12 @@ describe("timeout handling", () => {
 });
 
 describe("authentication", () => {
-  let mock: MockAdapter;
-  let reportFile = "__tests__/resources/robot.xml";
+  const mock: MockAdapter;
+  const reportFile = "__tests__/resources/robot.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -118,7 +118,7 @@ describe("authentication", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -134,7 +134,7 @@ describe("authentication", () => {
 
   it("can be maded with basic auth using username and password", async () => {
     /*
-      mock.onPost('http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC',
+      mock.onPost('http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY',
           expect.objectContaining({
               Authorization: expect.stringMatching(/^Basic dXNlcm5hbWU6cGFzc3dvcmQ=$/),
         })).reply(200, data);
@@ -142,7 +142,7 @@ describe("authentication", () => {
 
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
@@ -152,12 +152,12 @@ describe("authentication", () => {
       jiraPassword: "password",
     };
     const xrayClient = new XrayDatacenterClient(xrayServerSettings);
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -171,7 +171,7 @@ describe("authentication", () => {
   it("can be maded with PAT (Personal Access Token)", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
@@ -180,12 +180,12 @@ describe("authentication", () => {
       jiraToken: "OTE0ODc2NDE2NTgxOnrhigwOreFoyNIA9lXTZaOcgbNY",
     };
     const xrayClient = new XrayDatacenterClient(xrayServerSettings);
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -198,9 +198,9 @@ describe("authentication", () => {
 });
 
 describe("invalid request for some report file", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/dummy.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/dummy.xml";
 
   beforeEach(() => {
     mock = new MockAdapter(axios);
@@ -219,9 +219,9 @@ describe("invalid request for some report file", () => {
   it("returns an error if unable to read reportFile", async () => {
     mock.onPost().reply(200, {});
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
     try {
@@ -237,7 +237,7 @@ describe("invalid request for some report file", () => {
   it("returns an error if format is not specified", async () => {
     mock.onPost().reply(200, {});
 
-    let reportConfig: any = {};
+    const reportConfig: any = {};
     try {
       await xrayClient.submitResults(reportFile, reportConfig);
       throw new Error("dummy"); // should not reach here
@@ -249,7 +249,7 @@ describe("invalid request for some report file", () => {
   it("returns an error if format is not supported", async () => {
     mock.onPost().reply(200, {});
 
-    let reportConfig: ReportConfig = { format: "dummy" };
+    const reportConfig: ReportConfig = { format: "dummy" };
     try {
       await xrayClient.submitResults(reportFile, reportConfig);
       throw new Error("dummy"); // should not reach here
@@ -260,13 +260,13 @@ describe("invalid request for some report file", () => {
 });
 
 describe("JUnit standard endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/junit.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/junit.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -274,7 +274,7 @@ describe("JUnit standard endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -299,7 +299,7 @@ describe("JUnit standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution/junit")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: JUNIT_FORMAT };
+    const reportConfig: ReportConfig = { format: JUNIT_FORMAT };
     try {
       await xrayClient.submitResults(reportFile, reportConfig);
       throw new Error("dummy"); // should not reach here
@@ -313,15 +313,15 @@ describe("JUnit standard endpoint", () => {
   it("sends the correct URL encoded parameters when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/junit?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome"
+        "http://xray.example.com/rest/raven/2.0/import/execution/junit?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironment: "chrome",
@@ -333,15 +333,15 @@ describe("JUnit standard endpoint", () => {
   it("sends the correct URL encoded parameters, for multiple testEnvironments, when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/junit?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
+        "http://xray.example.com/rest/raven/2.0/import/execution/junit?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironments: ["chrome", "mac"],
@@ -353,13 +353,13 @@ describe("JUnit standard endpoint", () => {
   it("sends the correct payload when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/junit?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/junit?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
     await xrayClient.submitResults(reportFile, reportConfig);
@@ -378,24 +378,24 @@ describe("JUnit standard endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
   });
 
   it("returns Test Execution data when submitResults is called with success", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/junit?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/junit?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -407,13 +407,13 @@ describe("JUnit standard endpoint", () => {
 });
 
 describe("TestNG standard endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/testng.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/testng.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -421,7 +421,7 @@ describe("TestNG standard endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -446,7 +446,7 @@ describe("TestNG standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution/testng")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: TESTNG_FORMAT };
+    const reportConfig: ReportConfig = { format: TESTNG_FORMAT };
     try {
       await xrayClient.submitResults(reportFile, reportConfig);
       throw new Error("dummy"); // should not reach here
@@ -460,15 +460,15 @@ describe("TestNG standard endpoint", () => {
   it("sends the correct URL encoded parameters when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/testng?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome"
+        "http://xray.example.com/rest/raven/2.0/import/execution/testng?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: TESTNG_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironment: "chrome",
@@ -480,15 +480,15 @@ describe("TestNG standard endpoint", () => {
   it("sends the correct URL encoded parameters, for multiple testEnvironments, when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/testng?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
+        "http://xray.example.com/rest/raven/2.0/import/execution/testng?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: TESTNG_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironments: ["chrome", "mac"],
@@ -500,13 +500,13 @@ describe("TestNG standard endpoint", () => {
   it("sends the correct payload when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/testng?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/testng?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: TESTNG_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
     await xrayClient.submitResults(reportFile, reportConfig);
@@ -525,24 +525,24 @@ describe("TestNG standard endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
   });
 
   it("returns Test Execution data when submitResults is called with success", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/testng?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/testng?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: TESTNG_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -554,13 +554,13 @@ describe("TestNG standard endpoint", () => {
 });
 
 describe("Nunit standard endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/nunit.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/nunit.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -568,7 +568,7 @@ describe("Nunit standard endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -593,7 +593,7 @@ describe("Nunit standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution/nunit")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: NUNIT_FORMAT };
+    const reportConfig: ReportConfig = { format: NUNIT_FORMAT };
     try {
       await xrayClient.submitResults(reportFile, reportConfig);
       throw new Error("dummy"); // should not reach here
@@ -607,15 +607,15 @@ describe("Nunit standard endpoint", () => {
   it("sends the correct URL encoded parameters when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/nunit?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome"
+        "http://xray.example.com/rest/raven/2.0/import/execution/nunit?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: NUNIT_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironment: "chrome",
@@ -627,15 +627,15 @@ describe("Nunit standard endpoint", () => {
   it("sends the correct URL encoded parameters, for multiple testEnvironments, when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/nunit?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
+        "http://xray.example.com/rest/raven/2.0/import/execution/nunit?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: NUNIT_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironments: ["chrome", "mac"],
@@ -647,13 +647,13 @@ describe("Nunit standard endpoint", () => {
   it("sends the correct payload when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/nunit?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/nunit?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: NUNIT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
     await xrayClient.submitResults(reportFile, reportConfig);
@@ -672,24 +672,24 @@ describe("Nunit standard endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
   });
 
   it("returns Test Execution data when submitResults is called with success", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/nunit?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/nunit?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: NUNIT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -701,13 +701,13 @@ describe("Nunit standard endpoint", () => {
 });
 
 describe("xunit standard endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/xunit.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/xunit.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -715,7 +715,7 @@ describe("xunit standard endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -740,7 +740,7 @@ describe("xunit standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution/xunit")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: XUNIT_FORMAT };
+    const reportConfig: ReportConfig = { format: XUNIT_FORMAT };
     try {
       await xrayClient.submitResults(reportFile, reportConfig);
       throw new Error("dummy"); // should not reach here
@@ -754,15 +754,15 @@ describe("xunit standard endpoint", () => {
   it("sends the correct URL encoded parameters when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/xunit?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome"
+        "http://xray.example.com/rest/raven/2.0/import/execution/xunit?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XUNIT_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironment: "chrome",
@@ -774,15 +774,15 @@ describe("xunit standard endpoint", () => {
   it("sends the correct URL encoded parameters, for multiple testEnvironments, when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/xunit?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
+        "http://xray.example.com/rest/raven/2.0/import/execution/xunit?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XUNIT_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironments: ["chrome", "mac"],
@@ -794,13 +794,13 @@ describe("xunit standard endpoint", () => {
   it("sends the correct payload when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/xunit?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/xunit?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XUNIT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
     await xrayClient.submitResults(reportFile, reportConfig);
@@ -819,24 +819,24 @@ describe("xunit standard endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
   });
 
   it("returns Test Execution data when submitResults is called with success", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/xunit?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/xunit?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XUNIT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -848,13 +848,13 @@ describe("xunit standard endpoint", () => {
 });
 
 describe("Robot Framework standard endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/robot.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/robot.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -862,7 +862,7 @@ describe("Robot Framework standard endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -887,7 +887,7 @@ describe("Robot Framework standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution/robot")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: ROBOT_FORMAT };
+    const reportConfig: ReportConfig = { format: ROBOT_FORMAT };
     try {
       await xrayClient.submitResults(reportFile, reportConfig);
       throw new Error("dummy"); // should not reach here
@@ -901,15 +901,15 @@ describe("Robot Framework standard endpoint", () => {
   it("sends the correct URL encoded parameters when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome"
+        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironment: "chrome",
@@ -921,15 +921,15 @@ describe("Robot Framework standard endpoint", () => {
   it("sends the correct URL encoded parameters, for multiple testEnvironments, when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC&testPlanKey=CALC-10&testExecKey=CALC-82&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
+        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY&testPlanKey=XRAY-10&testExecKey=XRAY-765&fixVersion=1.0&revision=123&testEnvironments=chrome%3Bmac"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironments: ["chrome", "mac"],
@@ -941,13 +941,13 @@ describe("Robot Framework standard endpoint", () => {
   it("sends the correct payload when submitResults is called", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
     await xrayClient.submitResults(reportFile, reportConfig);
@@ -966,24 +966,24 @@ describe("Robot Framework standard endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
   });
 
   it("returns Test Execution data when submitResults is called with success", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=CALC"
+        "http://xray.example.com/rest/raven/2.0/import/execution/robot?projectKey=XRAY"
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
-      projectKey: "CALC",
+      projectKey: "XRAY",
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -995,13 +995,13 @@ describe("Robot Framework standard endpoint", () => {
 });
 
 describe("Cucumber standard endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/cucumber.json";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/cucumber.json";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -1009,7 +1009,7 @@ describe("Cucumber standard endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -1036,11 +1036,11 @@ describe("Cucumber standard endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: CUCUMBER_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironment: "chrome",
@@ -1056,13 +1056,13 @@ describe("Cucumber standard endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: CUCUMBER_FORMAT,
     };
 
     await xrayClient.submitResults(reportFile, reportConfig);
     expect(mock.history.post.length).toBe(1);
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
     expect(mock.history.post[0].data).toEqual(reportContent);
   });
 
@@ -1073,11 +1073,11 @@ describe("Cucumber standard endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: CUCUMBER_FORMAT,
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -1089,13 +1089,13 @@ describe("Cucumber standard endpoint", () => {
 });
 
 describe("Behave standard endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/behave.json";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/behave.json";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -1103,7 +1103,7 @@ describe("Behave standard endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -1128,11 +1128,11 @@ describe("Behave standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution/behave")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: BEHAVE_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironment: "chrome",
@@ -1145,14 +1145,14 @@ describe("Behave standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution/behave")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: BEHAVE_FORMAT,
     };
 
     await xrayClient.submitResults(reportFile, reportConfig);
 
     expect(mock.history.post.length).toBe(1);
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
     expect(mock.history.post[0].data).toEqual(reportContent);
   });
 
@@ -1161,11 +1161,11 @@ describe("Behave standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution/behave")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: BEHAVE_FORMAT,
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -1177,13 +1177,13 @@ describe("Behave standard endpoint", () => {
 });
 
 describe("Xray JSON standard endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/xray_server.json";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/xray_server.json";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -1191,7 +1191,7 @@ describe("Xray JSON standard endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -1216,11 +1216,11 @@ describe("Xray JSON standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XRAY_FORMAT,
-      projectKey: "CALC",
-      testPlanKey: "CALC-10",
-      testExecKey: "CALC-82",
+      projectKey: "XRAY",
+      testPlanKey: "XRAY-10",
+      testExecKey: "XRAY-765",
       version: "1.0",
       revision: "123",
       testEnvironment: "chrome",
@@ -1234,14 +1234,14 @@ describe("Xray JSON standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XRAY_FORMAT,
     };
 
     await xrayClient.submitResults(reportFile, reportConfig);
 
     expect(mock.history.post.length).toBe(1);
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
     expect(mock.history.post[0].data).toEqual(reportContent);
   });
 
@@ -1250,11 +1250,11 @@ describe("Xray JSON standard endpoint", () => {
       .onPost("http://xray.example.com/rest/raven/2.0/import/execution")
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XRAY_FORMAT,
     };
 
-    let response: any = await xrayClient.submitResults(
+    const response: any = await xrayClient.submitResults(
       reportFile,
       reportConfig
     );
@@ -1268,13 +1268,13 @@ describe("Xray JSON standard endpoint", () => {
 /* multipart endpoints */
 
 describe("JUnit multipart endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/junit.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/junit.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -1282,7 +1282,7 @@ describe("JUnit multipart endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -1309,7 +1309,7 @@ describe("JUnit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: JUNIT_FORMAT };
+    const reportConfig: ReportConfig = { format: JUNIT_FORMAT };
     try {
       await xrayClient.submitResultsMultipart(reportFile, reportConfig);
       throw new Error("dummy"); // should not reach here
@@ -1327,7 +1327,7 @@ describe("JUnit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
       testExecInfo: {
         fields: {
@@ -1358,8 +1358,8 @@ describe("JUnit multipart endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
     expect(parts[1].filename).toEqual("info.json");
     expect(parts[1].type).toEqual("application/json");
@@ -1375,7 +1375,7 @@ describe("JUnit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
@@ -1396,8 +1396,8 @@ describe("JUnit multipart endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
     expect(parts[1].filename).toEqual("info.json");
     expect(parts[1].type).toEqual("application/json");
@@ -1413,7 +1413,7 @@ describe("JUnit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
@@ -1436,8 +1436,8 @@ describe("JUnit multipart endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
     expect(parts[1].filename).toEqual("info.json");
     expect(parts[1].type).toEqual("application/json");
@@ -1458,13 +1458,13 @@ describe("JUnit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
 
-    let response: any = await xrayClient.submitResultsMultipart(
+    const response: any = await xrayClient.submitResultsMultipart(
       reportFile,
       reportConfig
     );
@@ -1476,13 +1476,13 @@ describe("JUnit multipart endpoint", () => {
 });
 
 describe("TestNG multipart endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/testng.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/testng.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -1490,7 +1490,7 @@ describe("TestNG multipart endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -1517,9 +1517,9 @@ describe("TestNG multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: TESTNG_FORMAT };
+    const reportConfig: ReportConfig = { format: TESTNG_FORMAT };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -1538,7 +1538,7 @@ describe("TestNG multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: TESTNG_FORMAT,
       testExecInfo: {
         fields: {
@@ -1569,8 +1569,8 @@ describe("TestNG multipart endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
     expect(parts[1].filename).toEqual("info.json");
     expect(parts[1].type).toEqual("application/json");
@@ -1586,7 +1586,7 @@ describe("TestNG multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: TESTNG_FORMAT,
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
@@ -1607,8 +1607,8 @@ describe("TestNG multipart endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
     expect(parts[1].filename).toEqual("info.json");
     expect(parts[1].type).toEqual("application/json");
@@ -1624,7 +1624,7 @@ describe("TestNG multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: TESTNG_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
@@ -1647,8 +1647,8 @@ describe("TestNG multipart endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
     expect(parts[1].filename).toEqual("info.json");
     expect(parts[1].type).toEqual("application/json");
@@ -1669,13 +1669,13 @@ describe("TestNG multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: TESTNG_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
 
-    let response: any = await xrayClient.submitResultsMultipart(
+    const response: any = await xrayClient.submitResultsMultipart(
       reportFile,
       reportConfig
     );
@@ -1687,13 +1687,13 @@ describe("TestNG multipart endpoint", () => {
 });
 
 describe("Nunit multipart endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/nunit.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/nunit.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -1701,7 +1701,7 @@ describe("Nunit multipart endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -1728,9 +1728,9 @@ describe("Nunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: NUNIT_FORMAT };
+    const reportConfig: ReportConfig = { format: NUNIT_FORMAT };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -1748,7 +1748,7 @@ describe("Nunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: NUNIT_FORMAT,
       testExecInfo: {
         fields: {
@@ -1763,7 +1763,7 @@ describe("Nunit multipart endpoint", () => {
       },
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -1784,8 +1784,8 @@ describe("Nunit multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.xml");
       expect(parts[0].type).toEqual("application/xml");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -1804,12 +1804,12 @@ describe("Nunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: NUNIT_FORMAT,
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -1830,8 +1830,8 @@ describe("Nunit multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.xml");
       expect(parts[0].type).toEqual("application/xml");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -1850,13 +1850,13 @@ describe("Nunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: NUNIT_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -1878,8 +1878,8 @@ describe("Nunit multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.xml");
       expect(parts[0].type).toEqual("application/xml");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -1903,13 +1903,13 @@ describe("Nunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: NUNIT_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -1926,13 +1926,13 @@ describe("Nunit multipart endpoint", () => {
 });
 
 describe("xunit multipart endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/junit.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/junit.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -1940,7 +1940,7 @@ describe("xunit multipart endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -1967,9 +1967,9 @@ describe("xunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: JUNIT_FORMAT };
+    const reportConfig: ReportConfig = { format: JUNIT_FORMAT };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -1987,7 +1987,7 @@ describe("xunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
       testExecInfo: {
         fields: {
@@ -2002,7 +2002,7 @@ describe("xunit multipart endpoint", () => {
       },
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2023,8 +2023,8 @@ describe("xunit multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.xml");
       expect(parts[0].type).toEqual("application/xml");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2043,12 +2043,12 @@ describe("xunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2069,8 +2069,8 @@ describe("xunit multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.xml");
       expect(parts[0].type).toEqual("application/xml");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2089,7 +2089,7 @@ describe("xunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
@@ -2112,8 +2112,8 @@ describe("xunit multipart endpoint", () => {
 
     expect(parts[0].filename).toEqual("report.xml");
     expect(parts[0].type).toEqual("application/xml");
-    let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-    let partContent = parts[0].data.toString("utf-8");
+    const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+    const partContent = parts[0].data.toString("utf-8");
     expect(partContent).toEqual(reportContent);
     expect(parts[1].filename).toEqual("info.json");
     expect(parts[1].type).toEqual("application/json");
@@ -2134,13 +2134,13 @@ describe("xunit multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: JUNIT_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
 
-    let response: any = await xrayClient.submitResultsMultipart(
+    const response: any = await xrayClient.submitResultsMultipart(
       reportFile,
       reportConfig
     );
@@ -2152,13 +2152,13 @@ describe("xunit multipart endpoint", () => {
 });
 
 describe("Robot Framework multipart endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/robot.xml";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/robot.xml";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -2166,7 +2166,7 @@ describe("Robot Framework multipart endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -2193,9 +2193,9 @@ describe("Robot Framework multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: ROBOT_FORMAT };
+    const reportConfig: ReportConfig = { format: ROBOT_FORMAT };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2213,7 +2213,7 @@ describe("Robot Framework multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
       testExecInfo: {
         fields: {
@@ -2228,7 +2228,7 @@ describe("Robot Framework multipart endpoint", () => {
       },
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2249,8 +2249,8 @@ describe("Robot Framework multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.xml");
       expect(parts[0].type).toEqual("application/xml");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2269,12 +2269,12 @@ describe("Robot Framework multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2295,8 +2295,8 @@ describe("Robot Framework multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.xml");
       expect(parts[0].type).toEqual("application/xml");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2315,13 +2315,13 @@ describe("Robot Framework multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2343,8 +2343,8 @@ describe("Robot Framework multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.xml");
       expect(parts[0].type).toEqual("application/xml");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2368,13 +2368,13 @@ describe("Robot Framework multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: ROBOT_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2391,13 +2391,13 @@ describe("Robot Framework multipart endpoint", () => {
 });
 
 describe("Cucumber multipart endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/cucumber.json";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/cucumber.json";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -2405,7 +2405,7 @@ describe("Cucumber multipart endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -2432,7 +2432,7 @@ describe("Cucumber multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: CUCUMBER_FORMAT };
+    const reportConfig: ReportConfig = { format: CUCUMBER_FORMAT };
     try {
       await xrayClient.submitResultsMultipart(reportFile, reportConfig);
     } catch (error: any) {
@@ -2449,7 +2449,7 @@ describe("Cucumber multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: CUCUMBER_FORMAT,
       testExecInfo: {
         fields: {
@@ -2464,7 +2464,7 @@ describe("Cucumber multipart endpoint", () => {
       },
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2485,8 +2485,8 @@ describe("Cucumber multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.json");
       expect(parts[0].type).toEqual("application/json");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2505,12 +2505,12 @@ describe("Cucumber multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: CUCUMBER_FORMAT,
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2531,8 +2531,8 @@ describe("Cucumber multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.json");
       expect(parts[0].type).toEqual("application/json");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2551,13 +2551,13 @@ describe("Cucumber multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: CUCUMBER_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
 
-    let response: any = await xrayClient.submitResultsMultipart(
+    const response: any = await xrayClient.submitResultsMultipart(
       reportFile,
       reportConfig
     );
@@ -2569,13 +2569,13 @@ describe("Cucumber multipart endpoint", () => {
 });
 
 describe("Behave multipart endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/behave.json";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/behave.json";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -2583,7 +2583,7 @@ describe("Behave multipart endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -2610,9 +2610,9 @@ describe("Behave multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: BEHAVE_FORMAT };
+    const reportConfig: ReportConfig = { format: BEHAVE_FORMAT };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2630,7 +2630,7 @@ describe("Behave multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: BEHAVE_FORMAT,
       testExecInfo: {
         fields: {
@@ -2645,7 +2645,7 @@ describe("Behave multipart endpoint", () => {
       },
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2666,8 +2666,8 @@ describe("Behave multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.json");
       expect(parts[0].type).toEqual("application/json");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2686,12 +2686,12 @@ describe("Behave multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: BEHAVE_FORMAT,
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2712,8 +2712,8 @@ describe("Behave multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.json");
       expect(parts[0].type).toEqual("application/json");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2732,13 +2732,13 @@ describe("Behave multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: BEHAVE_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2755,13 +2755,13 @@ describe("Behave multipart endpoint", () => {
 });
 
 describe("Xray JSON multipart endpoint", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
-  let reportFile = "__tests__/resources/xray_server.json";
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
+  const reportFile = "__tests__/resources/xray_server.json";
   const successfulResponseData = {
     testExecIssue: {
       id: "38101",
-      key: "CALC-82",
+      key: "XRAY-765",
       self: "http://xray.example.com/rest/api/2/issue/38101",
     },
     testIssues: {
@@ -2769,7 +2769,7 @@ describe("Xray JSON multipart endpoint", () => {
         {
           self: "http://xray.example.com/rest/api/2/issue/36600",
           id: "36600",
-          key: "CALC-1",
+          key: "XRAY-1",
         },
       ],
     },
@@ -2796,9 +2796,9 @@ describe("Xray JSON multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = { format: XRAY_FORMAT };
+    const reportConfig: ReportConfig = { format: XRAY_FORMAT };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2816,7 +2816,7 @@ describe("Xray JSON multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XRAY_FORMAT,
       testExecInfo: {
         fields: {
@@ -2831,7 +2831,7 @@ describe("Xray JSON multipart endpoint", () => {
       },
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2852,8 +2852,8 @@ describe("Xray JSON multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.json");
       expect(parts[0].type).toEqual("application/json");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2872,12 +2872,12 @@ describe("Xray JSON multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XRAY_FORMAT,
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2898,8 +2898,8 @@ describe("Xray JSON multipart endpoint", () => {
 
       expect(parts[0].filename).toEqual("report.json");
       expect(parts[0].type).toEqual("application/json");
-      let reportContent = fs.readFileSync(reportFile).toString("utf-8");
-      let partContent = parts[0].data.toString("utf-8");
+      const reportContent = fs.readFileSync(reportFile).toString("utf-8");
+      const partContent = parts[0].data.toString("utf-8");
       expect(partContent).toEqual(reportContent);
       expect(parts[1].filename).toEqual("info.json");
       expect(parts[1].type).toEqual("application/json");
@@ -2918,13 +2918,13 @@ describe("Xray JSON multipart endpoint", () => {
       )
       .reply(200, successfulResponseData);
 
-    let reportConfig: ReportConfig = {
+    const reportConfig: ReportConfig = {
       format: XRAY_FORMAT,
       testInfoFile: "__tests__/resources/testInfo.json",
       testExecInfoFile: "__tests__/resources/testExecInfo.json",
     };
     try {
-      let response: any = await xrayClient.submitResultsMultipart(
+      const response: any = await xrayClient.submitResultsMultipart(
         reportFile,
         reportConfig
       );
@@ -2943,11 +2943,11 @@ describe("Xray JSON multipart endpoint", () => {
 /* other REST API related operations */
 
 describe("associateTestExecutionToTestPlan", () => {
-  let mock: MockAdapter;
-  let xrayClient: XrayDatacenterClient;
+  const mock: MockAdapter;
+  const xrayClient: XrayDatacenterClient;
   const successfulResponseData: any[] = [];
   const errorResponseData: string[] = [
-    "Issue with key CALC-11 not found or is not of type Test Execution.",
+    "Issue with key XRAY-11 not found or is not of type Test Execution.",
   ];
 
   beforeEach(() => {
@@ -2967,37 +2967,37 @@ describe("associateTestExecutionToTestPlan", () => {
   it("associates a Test Execution to a Test Plan, for a valid request and successful authentication", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/api/testplan/CALC-10/testexecution"
+        "http://xray.example.com/rest/raven/2.0/api/testplan/XRAY-10/testexecution"
       )
       .reply(200, successfulResponseData);
 
-    let testExecIssueKey = "CALC-11";
-    let testPlanIssueKey = "CALC-10";
-    let res = await xrayClient.associateTestExecutionToTestPlan(
+    const testExecIssueKey = "XRAY-11";
+    const testPlanIssueKey = "XRAY-10";
+    const res = await xrayClient.associateTestExecutionToTestPlan(
       testExecIssueKey,
       testPlanIssueKey
     );
-    expect(mock.history.post[0].data).toEqual('{"add":["CALC-11"]}');
+    expect(mock.history.post[0].data).toEqual('{"add":["XRAY-11"]}');
     expect(res).toEqual(testExecIssueKey);
   });
 
   it("returns error if failed to associate a Test Execution to a Test Plan", async () => {
     mock
       .onPost(
-        "http://xray.example.com/rest/raven/2.0/api/testplan/CALC-10/testexecution"
+        "http://xray.example.com/rest/raven/2.0/api/testplan/XRAY-10/testexecution"
       )
       .reply(200, errorResponseData);
 
     try {
-      let testExecIssueKey = "CALC-11";
-      let testPlanIssueKey = "CALC-10";
+      const testExecIssueKey = "XRAY-11";
+      const testPlanIssueKey = "XRAY-10";
       await xrayClient.associateTestExecutionToTestPlan(
         testExecIssueKey,
         testPlanIssueKey
       );
       throw new Error("dummy"); // should not reach here
     } catch (error: any) {
-      expect(mock.history.post[0].data).toEqual('{"add":["CALC-11"]}');
+      expect(mock.history.post[0].data).toEqual('{"add":["XRAY-11"]}');
       expect(error._response).toEqual(errorResponseData[0]);
     }
   });

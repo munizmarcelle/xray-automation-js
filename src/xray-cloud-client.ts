@@ -1,11 +1,11 @@
-import { GraphQLClient, gql } from "graphql-request";
+
 import axios from "axios";
 import fs from "fs";
 import FormData from "form-data";
-import XrayErrorResponse from "./xray-error-response";
-import XrayCloudResponseV2 from "./xray-cloud-response-v2";
+import XrayErrorResponse from "./xray-error-response.js";
+import XrayCloudResponseV2 from "./xray-cloud-response-v2.js";
 // import XrayCloudGraphQLResponseV2 from './xray-cloud-graphql-response-v2';
-import XrayCloudGraphQLErrorResponse from "./xray-cloud-graphql-error-response";
+import XrayCloudGraphQLErrorResponse from "./xray-cloud-graphql-error-response.js";
 import {
   XRAY_FORMAT,
   JUNIT_FORMAT,
@@ -17,8 +17,8 @@ import {
   BEHAVE_FORMAT,
   ReportConfig,
   XraySettings,
-} from "./index";
-
+} from "./index.js";
+import { GraphQLClient, gql } from "graphql-request"
 const xrayCloudBaseUrl = "https://xray.cloud.getxray.app/api/v2";
 const authenticateUrl = xrayCloudBaseUrl + "/authenticate";
 
@@ -53,7 +53,7 @@ export class XrayCloudClient {
     if (!this.supportedFormats.includes(config.format))
       throw new XrayErrorResponse("ERROR: unsupported format " + config.format);
 
-    let reportContent: string;
+    const reportContent: string;
     try {
       reportContent = fs.readFileSync(reportPath).toString();
     } catch (error: any) {
@@ -80,7 +80,7 @@ export class XrayCloudClient {
         return authToken;
       })
       .then((authToken) => {
-        let endpointUrl;
+        const endpointUrl;
         if (config.format === XRAY_FORMAT) {
           endpointUrl = xrayCloudBaseUrl + "/import/execution";
         } else {
@@ -96,7 +96,7 @@ export class XrayCloudClient {
           testEnvironments?: string;
         }
         const params: IParams = {};
-        let url = endpointUrl;
+        const url = endpointUrl;
 
         // all formats support GET parameters, except for xray and cucumber
         if (
@@ -135,7 +135,7 @@ export class XrayCloudClient {
           url = endpointUrl + "?" + urlParams;
         }
 
-        let contentType;
+        const contentType;
         if (
           [
             JUNIT_FORMAT,
@@ -206,7 +206,7 @@ export class XrayCloudClient {
         return authToken;
       })
       .then((authToken) => {
-        let endpointUrl;
+        const endpointUrl;
         if (config.format === XRAY_FORMAT) {
           endpointUrl = xrayCloudBaseUrl + "/import/execution/multipart";
         } else {
@@ -217,9 +217,9 @@ export class XrayCloudClient {
             "/multipart";
         }
 
-        let reportContent;
-        let testInfoContent;
-        let testExecInfoContent;
+        const reportContent;
+        const testInfoContent;
+        const testExecInfoContent;
         try {
           reportContent = fs.readFileSync(reportPath).toString();
           if (config.testInfoFile !== undefined)
@@ -236,7 +236,7 @@ export class XrayCloudClient {
         }
 
         const bodyFormData = new FormData();
-        let fileName;
+        const fileName;
         if (
           [
             JUNIT_FORMAT,
@@ -353,7 +353,7 @@ export class XrayCloudClient {
 
         return graphQLClient.request(mutation);
       })
-      .then((response) => {
+      .then((response:any) => {
         return (
           response.data.addTestExecutionsToTestPlan.addedTestExecutions[0] ||
           testExecIssueId
@@ -391,7 +391,7 @@ export class XrayCloudClient {
 
         return graphQLClient.request(query);
       })
-      .then((response) => {
+      .then((response: any) => {
         return response.getTestPlans.results[0].issueId;
       })
       .catch((error) => {

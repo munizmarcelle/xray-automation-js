@@ -54,7 +54,7 @@ export class XrayDatacenterClient {
     if (!this.supportedFormats.includes(config.format))
       throw new XrayErrorResponse("ERROR: unsupported format " + config.format);
 
-    let endpointUrl;
+    const endpointUrl;
     if (config.format === XRAY_FORMAT) {
       endpointUrl = this.jiraBaseUrl + "/rest/raven/2.0/import/execution";
     } else {
@@ -62,7 +62,7 @@ export class XrayDatacenterClient {
         this.jiraBaseUrl + "/rest/raven/2.0/import/execution/" + config.format;
     }
 
-    let authorizationHeaderValue;
+    const authorizationHeaderValue;
     if (this.jiraToken !== undefined) {
       authorizationHeaderValue = "Bearer " + this.jiraToken;
     } else {
@@ -73,7 +73,7 @@ export class XrayDatacenterClient {
         );
     }
 
-    let reportContent;
+    const reportContent;
     try {
       reportContent = fs.readFileSync(reportPath).toString();
     } catch (error: any) {
@@ -144,7 +144,7 @@ export class XrayDatacenterClient {
       const urlParams = new URLSearchParams({ ...params }).toString();
       const url = endpointUrl + "?" + urlParams;
       const bodyFormData = new FormData();
-      let fileName;
+      const fileName;
       if (
         [
           JUNIT_FORMAT,
@@ -200,7 +200,7 @@ export class XrayDatacenterClient {
         "ERROR: testExecInfoFile or testExecInfo must be defined"
       );
 
-    let endpointUrl;
+    const endpointUrl;
     if (config.format === XRAY_FORMAT) {
       endpointUrl =
         this.jiraBaseUrl + "/rest/raven/2.0/import/execution/multipart";
@@ -212,7 +212,7 @@ export class XrayDatacenterClient {
         "/multipart";
     }
 
-    let authorizationHeaderValue;
+    const authorizationHeaderValue;
     if (this.jiraToken !== undefined) {
       authorizationHeaderValue = "Bearer " + this.jiraToken;
     } else {
@@ -223,9 +223,9 @@ export class XrayDatacenterClient {
         );
     }
 
-    let reportContent;
-    let testInfoContent;
-    let testExecInfoContent;
+    const reportContent;
+    const testInfoContent;
+    const testExecInfoContent;
     try {
       reportContent = fs.readFileSync(reportPath).toString();
       if (config.testInfoFile !== undefined)
@@ -242,8 +242,8 @@ export class XrayDatacenterClient {
     }
 
     const bodyFormData = new FormData();
-    let filePartName;
-    let fileName;
+    const filePartName;
+    const fileName;
     if (
       [
         JUNIT_FORMAT,
@@ -301,7 +301,7 @@ export class XrayDatacenterClient {
     testExecKey: string,
     testPlanKey: string
   ) {
-    let authorizationHeaderValue;
+    const authorizationHeaderValue;
     if (this.jiraToken !== undefined) {
       authorizationHeaderValue = "Bearer " + this.jiraToken;
     } else {

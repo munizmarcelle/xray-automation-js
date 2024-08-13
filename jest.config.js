@@ -1,6 +1,6 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 
-let config = {
+const config = {
   coverageThreshold: {
       global: {
           lines: 80,
@@ -13,7 +13,7 @@ coverageReporters: [
 ]
 };
 
-module.exports = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
   ...config

@@ -1,0 +1,14 @@
+{
+  "client_id": "ADC8E5CE8FE446D3BD926CC1AEFF9707",
+  "client_secret": "fe40e2670597a5a9c573ed4c8cda6ba5675580b7f3c4c6a440d78a6ea9eae478",
+  "jiraUserName": "marcelle.muniz@olxbr.com",
+  "project_key": "XRAY",
+  "projectId": "10623",
+  "xray_url": "https://xray.cloud.getxray.app",
+  "jira_baseurl": "https://olxbr.atlassian.net/projects/",
+  "jira_username": "admin",
+  "jira_password": "admin",
+  "keys": "XRAY-765",
+  "cloud_url": "https://www.zapimoveis.com.br/",
+  "graphql_v1_url": "/api/v1/graphql"
+}
